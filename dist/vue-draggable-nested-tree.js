@@ -2219,6 +2219,7 @@
                 options: opt,
                 store: store$$1
               };
+              _this.data.class = _this.data.class.replace(/(^| )dragging( |$)/g, ' ');
 
               if (_this.store.ondragend && _this.store.ondragend(_this.data, draggableHelperInfo) === false) {
                 arrayRemove(dplh.parent.children, dplh); // can't drop, no change
@@ -2228,7 +2229,6 @@
                 var oldTree = crossTree ? _this.store : null;
                 insertAfter(_this.data, dplh);
                 arrayRemove(dplh.parent.children, dplh);
-                _this.data.class = _this.data.class.replace(/(^| )dragging( |$)/g, ' ');
                 targetTree.$emit('drop', _this.data, targetTree, oldTree);
                 oldTree && oldTree.$emit('drop', _this.data, targetTree, oldTree); // emit change event if changed
 

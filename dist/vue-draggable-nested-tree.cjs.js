@@ -1180,6 +1180,7 @@ var DraggableTreeNode = {
               options: opt,
               store: store
             };
+            _this.data.class = _this.data.class.replace(/(^| )dragging( |$)/g, ' ');
 
             if (_this.store.ondragend && _this.store.ondragend(_this.data, draggableHelperInfo) === false) {
               hp.arrayRemove(dplh.parent.children, dplh); // can't drop, no change
@@ -1189,7 +1190,6 @@ var DraggableTreeNode = {
               var oldTree = crossTree ? _this.store : null;
               th.insertAfter(_this.data, dplh);
               hp.arrayRemove(dplh.parent.children, dplh);
-              _this.data.class = _this.data.class.replace(/(^| )dragging( |$)/g, ' ');
               targetTree.$emit('drop', _this.data, targetTree, oldTree);
               oldTree && oldTree.$emit('drop', _this.data, targetTree, oldTree); // emit change event if changed
 

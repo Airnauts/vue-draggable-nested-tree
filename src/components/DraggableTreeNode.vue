@@ -57,6 +57,7 @@ export default {
           },
           drop: (e, opt, store) => {
             const draggableHelperInfo = {event: e, options: opt, store}
+            this.data.class = this.data.class.replace(/(^| )dragging( |$)/g, ' ')
             if (this.store.ondragend && this.store.ondragend(this.data, draggableHelperInfo) === false) {
               hp.arrayRemove(dplh.parent.children, dplh)
               // can't drop, no change
@@ -66,7 +67,6 @@ export default {
               const oldTree = crossTree ? this.store : null
               th.insertAfter(this.data, dplh)
               hp.arrayRemove(dplh.parent.children, dplh)
-              this.data.class = this.data.class.replace(/(^| )dragging( |$)/g, ' ')
               targetTree.$emit('drop', this.data, targetTree, oldTree)
               oldTree && oldTree.$emit('drop', this.data, targetTree, oldTree)
               // emit change event if changed
