@@ -1109,6 +1109,8 @@ var DraggableTreeNode = {
 
     var dplh = this.store.dplh;
     this.$watch('store.draggable', function (draggable) {
+      var lastTime;
+
       if (isPropTrue(draggable)) {
         var triggerEl = _this.store.getTriggerEl ? _this.store.getTriggerEl(_this) : _this.$el.querySelector('.tree-node-inner');
         _this._draggableDestroy = draggableHelper(triggerEl, {
@@ -1154,6 +1156,16 @@ var DraggableTreeNode = {
               store: store
             };
             return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
+            var currentTime = new Date().getTime();
+
+            if (!lastTime || currentTime - lastTime > 200) {
+              lastTime = currentTime;
+
+              if (dplh && dplh._vm) {
+                var targetTree = dplh._vm.store;
+                targetTree.$emit('moving', _this.data, targetTree);
+              }
+            }
           },
           drop: function drop(e, opt, store) {
             var draggableHelperInfo = {
@@ -1162,8 +1174,8 @@ var DraggableTreeNode = {
               store: store
             };
 
-            if (_this.store.ondragend && _this.store.ondragend(_this.data, draggableHelperInfo) === false) {// hp.arrayRemove(dplh.parent.children, dplh)
-              // can't drop, no change
+            if (_this.store.ondragend && _this.store.ondragend(_this.data, draggableHelperInfo) === false) {
+              arrayRemove(dplh.parent.children, dplh); // can't drop, no change
             } else {
               var targetTree = dplh._vm.store;
               var crossTree = targetTree !== _this.store;
