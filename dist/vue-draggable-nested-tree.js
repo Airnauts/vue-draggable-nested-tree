@@ -2200,7 +2200,6 @@
                 options: opt,
                 store: store$$1
               };
-              return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
               var currentTime = new Date().getTime();
 
               if (!lastTime || currentTime - lastTime > 200) {
@@ -2211,6 +2210,8 @@
                   targetTree.$emit('moving', _this.data, targetTree);
                 }
               }
+
+              return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
             },
             drop: function drop(e, opt, store$$1) {
               var draggableHelperInfo = {

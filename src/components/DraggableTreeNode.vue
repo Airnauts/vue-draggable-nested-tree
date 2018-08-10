@@ -43,9 +43,8 @@ export default {
           },
           moving: (e, opt, store) => {
             const draggableHelperInfo = {event: e, options: opt, store}
-            return autoMoveDragPlaceHolder.call(this, draggableHelperInfo)
-
             const currentTime = (new Date()).getTime()
+
             if (!lastTime || currentTime - lastTime > 200) {
               lastTime = currentTime
               if (dplh && dplh._vm) {
@@ -53,6 +52,8 @@ export default {
                 targetTree.$emit('moving', this.data, targetTree)
               }
             }
+
+            return autoMoveDragPlaceHolder.call(this, draggableHelperInfo)
           },
           drop: (e, opt, store) => {
             const draggableHelperInfo = {event: e, options: opt, store}
