@@ -15,6 +15,7 @@ export default {
     }
     const {dplh} = this.store
     this.$watch('store.draggable', (draggable) => {
+      let lastTime
       if (ut.isPropTrue(draggable)) {
         const triggerEl = this.store.getTriggerEl ? this.store.getTriggerEl(this) : this.$el.querySelector('.tree-node-inner')
         this._draggableDestroy = draggableHelper(triggerEl, {
@@ -43,6 +44,15 @@ export default {
           moving: (e, opt, store) => {
             const draggableHelperInfo = {event: e, options: opt, store}
             return autoMoveDragPlaceHolder.call(this, draggableHelperInfo)
+
+            const currentTime = (new Date()).getTime()
+            if (!lastTime || currentTime - lastTime > 200) {
+              lastTime = currentTime
+              if (dplh && dplh._vm) {
+                const targetTree = dplh._vm.store
+                targetTree.$emit('moving', this.data, targetTree)
+              }
+            }
           },
           drop: (e, opt, store) => {
             const draggableHelperInfo = {event: e, options: opt, store}

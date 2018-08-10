@@ -1168,8 +1168,8 @@ var DraggableTreeNode = {
               store: store
             };
 
-            if (_this.store.ondragend && _this.store.ondragend(_this.data, draggableHelperInfo) === false) {
-              hp.arrayRemove(dplh.parent.children, dplh); // can't drop, no change
+            if (_this.store.ondragend && _this.store.ondragend(_this.data, draggableHelperInfo) === false) {// hp.arrayRemove(dplh.parent.children, dplh)
+              // can't drop, no change
             } else {
               var targetTree = dplh._vm.store;
               var crossTree = targetTree !== _this.store;
