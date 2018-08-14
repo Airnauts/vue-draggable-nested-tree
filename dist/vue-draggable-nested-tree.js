@@ -804,6 +804,7 @@
       })) : _vm._e()]);
     },
     staticRenderFns: [],
+    inject: ['$validator'],
     name: 'TreeNode',
     props: {
       data: {},
@@ -889,6 +890,7 @@
       })], 1);
     },
     staticRenderFns: [],
+    inject: ['$validator'],
     props: {
       data: {},
       idLength: {

@@ -56,6 +56,7 @@ var TreeNode = {
     })) : _vm._e()]);
   },
   staticRenderFns: [],
+  inject: ['$validator'],
   name: 'TreeNode',
   props: {
     data: {},
@@ -141,6 +142,7 @@ var Tree = {
     })], 1);
   },
   staticRenderFns: [],
+  inject: ['$validator'],
   props: {
     data: {},
     idLength: {
