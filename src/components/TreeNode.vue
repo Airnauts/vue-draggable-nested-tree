@@ -15,6 +15,7 @@
 </template>
 <script>
 export default {
+  inject: ['$validator'],
   name: 'TreeNode',
   props: {
     data: {},

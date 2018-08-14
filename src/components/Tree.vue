@@ -12,6 +12,7 @@ import * as ut from '../utils.js'
 import TreeNode from './TreeNode.vue'
 
 export default {
+  inject: ['$validator'],
   props: {
     data: {},
     idLength: {default: 5},
