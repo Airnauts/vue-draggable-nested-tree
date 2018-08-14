@@ -1158,23 +1158,23 @@ var DraggableTreeNode = {
 
           },
           moving: function moving(e, opt, store) {
-            var draggableHelperInfo = {
-              event: e,
-              options: opt,
-              store: store
-            };
             var currentTime = new Date().getTime();
 
-            if (!lastTime || currentTime - lastTime > 200) {
+            if (!lastTime || currentTime - lastTime > 100) {
+              var draggableHelperInfo = {
+                event: e,
+                options: opt,
+                store: store
+              };
               lastTime = currentTime;
 
               if (dplh && dplh._vm) {
                 var targetTree = dplh._vm.store;
                 targetTree.$emit('moving', _this.data, targetTree);
               }
-            }
 
-            return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
+              return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
+            }
           },
           drop: function drop(e, opt, store) {
             var draggableHelperInfo = {

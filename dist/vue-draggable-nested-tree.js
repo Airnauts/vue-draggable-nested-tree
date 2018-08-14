@@ -2197,23 +2197,23 @@
 
             },
             moving: function moving(e, opt, store$$1) {
-              var draggableHelperInfo = {
-                event: e,
-                options: opt,
-                store: store$$1
-              };
               var currentTime = new Date().getTime();
 
-              if (!lastTime || currentTime - lastTime > 200) {
+              if (!lastTime || currentTime - lastTime > 100) {
+                var draggableHelperInfo = {
+                  event: e,
+                  options: opt,
+                  store: store$$1
+                };
                 lastTime = currentTime;
 
                 if (dplh && dplh._vm) {
                   var targetTree = dplh._vm.store;
                   targetTree.$emit('moving', _this.data, targetTree);
                 }
-              }
 
-              return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
+                return autoMoveDragPlaceHolder.call(_this, draggableHelperInfo);
+              }
             },
             drop: function drop(e, opt, store$$1) {
               var draggableHelperInfo = {

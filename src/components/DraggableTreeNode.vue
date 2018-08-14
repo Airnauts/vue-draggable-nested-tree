@@ -42,18 +42,19 @@ export default {
             // console.log('drag start');
           },
           moving: (e, opt, store) => {
-            const draggableHelperInfo = {event: e, options: opt, store}
             const currentTime = (new Date()).getTime()
 
-            if (!lastTime || currentTime - lastTime > 200) {
+            if (!lastTime || currentTime - lastTime > 100) {
+              const draggableHelperInfo = {event: e, options: opt, store}
+
               lastTime = currentTime
               if (dplh && dplh._vm) {
                 const targetTree = dplh._vm.store
                 targetTree.$emit('moving', this.data, targetTree)
               }
-            }
 
-            return autoMoveDragPlaceHolder.call(this, draggableHelperInfo)
+              return autoMoveDragPlaceHolder.call(this, draggableHelperInfo)
+            }
           },
           drop: (e, opt, store) => {
             const draggableHelperInfo = {event: e, options: opt, store}
