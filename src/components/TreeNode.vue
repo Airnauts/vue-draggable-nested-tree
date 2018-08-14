@@ -7,11 +7,11 @@
     .tree-node-inner(:style="[data.innerStyle]" :class="[data.innerClass]")
       slot(:data="data" :store="store")
   .tree-node-children(v-if="childrenVisible")
-    TreeNode(v-for="child in data.children" :key="child._id"
+    TreeNode(v-for="(child,index) in data.children" :key="child._id"
       :data="child" :store="store"
     )
       template(slot-scope="props")
-        slot(:data="props.data" :store="props.store")
+        slot(:data="props.data" :index="index" :store="props.store")
 </template>
 <script>
 export default {

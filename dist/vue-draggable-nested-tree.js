@@ -783,7 +783,7 @@
         store: _vm.store
       })], 2)]) : _vm._e(), _vm.childrenVisible ? _c('div', {
         staticClass: "tree-node-children"
-      }, _vm._l(_vm.data.children, function (child) {
+      }, _vm._l(_vm.data.children, function (child, index) {
         return _c('TreeNode', {
           key: child._id,
           attrs: {
@@ -795,6 +795,7 @@
             fn: function fn(props) {
               return [_vm._t("default", null, {
                 data: props.data,
+                index: index,
                 store: props.store
               })];
             }
@@ -880,7 +881,8 @@
           fn: function fn(props) {
             return [_vm._t("default", null, {
               data: props.data,
-              store: _vm.store
+              store: _vm.store,
+              index: props.index
             })];
           }
         }])

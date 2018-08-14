@@ -2,7 +2,7 @@
 .he-tree.tree
   TreeNode(:data="rootData" :store="store")
     template(slot-scope="props")
-      slot(:data="props.data" :store="store")
+      slot(:data="props.data" :store="store" :index="props.index")
 </template>
 
 <script>
