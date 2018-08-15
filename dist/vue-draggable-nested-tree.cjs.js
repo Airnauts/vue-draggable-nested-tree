@@ -679,14 +679,10 @@ function autoMoveDragPlaceHolder (draggableHelperInfo) {
 
       if (currentTree) {
         var dragStartTree = this.store;
-        var treeChanged;
+        prevTree = dragStartTree;
+        treeChanged = true;
 
-        if (dhStore.movedCount === 0) {
-          prevTree = dragStartTree;
-          treeChanged = true;
-        }
-
-        if (prevTree !== currentTree) {
+        if (prevTree._uid !== currentTree._uid) {
           if (!isPropTrue(dragStartTree.crossTree) || !isPropTrue(currentTree.crossTree)) {
             return;
           }
@@ -1162,7 +1158,7 @@ var DraggableTreeNode = {
           moving: function moving(e, opt, store) {
             var currentTime = new Date().getTime();
 
-            if (!lastTime || currentTime - lastTime > 100) {
+            if (!lastTime || currentTime - lastTime > 50) {
               var draggableHelperInfo = {
                 event: e,
                 options: opt,

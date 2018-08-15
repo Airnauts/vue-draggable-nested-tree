@@ -179,12 +179,10 @@ export default function(draggableHelperInfo) {
       const currentTree = trees.find(tree => hp.isOffsetInEl(this.offset.x, this.offset.y, tree.$el))
       if (currentTree) {
         const dragStartTree = this.store
-        let treeChanged
-        if (dhStore.movedCount === 0) {
-          prevTree = dragStartTree
-          treeChanged = true
-        }
-        if (prevTree !== currentTree) {
+        prevTree = dragStartTree
+        treeChanged = true
+
+        if (prevTree._uid !== currentTree._uid) {
           if (!ut.isPropTrue(dragStartTree.crossTree) || !ut.isPropTrue(currentTree.crossTree)) {
             return
           }
