@@ -180,7 +180,7 @@ export default function(draggableHelperInfo) {
       if (currentTree) {
         const dragStartTree = this.store
         prevTree = dragStartTree
-        treeChanged = true
+        let treeChanged = true
 
         if (prevTree._uid !== currentTree._uid) {
           if (!ut.isPropTrue(dragStartTree.crossTree) || !ut.isPropTrue(currentTree.crossTree)) {

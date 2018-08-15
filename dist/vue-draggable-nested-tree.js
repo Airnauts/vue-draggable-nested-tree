@@ -1719,7 +1719,7 @@
         if (currentTree) {
           var dragStartTree = this.store;
           prevTree = dragStartTree;
-          treeChanged = true;
+          var treeChanged = true;
 
           if (prevTree._uid !== currentTree._uid) {
             if (!isPropTrue(dragStartTree.crossTree) || !isPropTrue(currentTree.crossTree)) {
