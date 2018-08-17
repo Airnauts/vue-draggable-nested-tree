@@ -235,17 +235,6 @@
     el.style.display = originDisplay;
     return size;
   }
-  /**
-   * [isOffsetInEl]
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Object} el HTML Element
-   */
-
-  function isOffsetInEl(x, y, el) {
-    var offset = getOffset(el);
-    return offset.x <= x && offset.x + el.offsetWidth >= x && offset.y <= y && offset.y + el.offsetHeight >= y;
-  } // get border
 
   function onDOM(el, name, handler) {
     if (el.addEventListener) {
@@ -1492,6 +1481,8 @@
 
   // 对 drag placeholder进行的操作
 
+  var lastY;
+  var lastX;
   var targets = {
     'nothing': function nothing(info) {},
     'after': function after(_ref) {
@@ -1648,11 +1639,11 @@
     },
     // 当前位置在另一节点inner左边
     'at left': function atLeft(info) {
-      return info.offset.x < info.tiOffset.x;
+      return info.offset.x < info.tiOffset.x + info.currentTree.indent + 20;
     },
     // 当前位置在另一节点innner indent位置右边
     'at indent right': function atIndentRight(info) {
-      return info.offset.x > info.tiOffset.x + info.currentTree.indent;
+      return info.offset.x > info.tiOffset.x + info.currentTree.indent + 20;
     } // convert rule output to Boolean
 
   };
@@ -1710,38 +1701,10 @@
       // right bottom point
       // tree
       currentTree: function currentTree() {
-        var _this = this;
-
-        var currentTree = trees.find(function (tree) {
-          return isOffsetInEl(_this.offset.x, _this.offset.y, tree.$el);
-        });
-
-        if (currentTree) {
-          var dragStartTree = this.store;
-          prevTree = dragStartTree;
-          var treeChanged = true;
-
-          if (prevTree._uid !== currentTree._uid) {
-            if (!isPropTrue(dragStartTree.crossTree) || !isPropTrue(currentTree.crossTree)) {
-              return;
-            }
-
-            prevTree = currentTree;
-            treeChanged = true;
-          }
-
-          if (!isPropTrue(currentTree.droppable)) {
-            return;
-          }
-
-          if (treeChanged) {
-            // when move start or drag move into another tree
-            // resolve _droppable
-            resolveBranchDroppable(info, currentTree.rootData);
-          }
-
-          return currentTree;
-        }
+        // BLOCKED CROSS TREE FEATURE
+        prevTree = this.store;
+        resolveBranchDroppable(info, prevTree.rootData);
+        return prevTree;
       },
       currentTreeRootEl: function currentTreeRootEl() {
         return document.getElementById(this.currentTree.rootData._id);
@@ -1780,6 +1743,28 @@
             y = _this$offset.y;
         var currentNode = currentTree.rootData;
 
+        if (lastX === undefined) {
+          lastX = x;
+        }
+
+        if (lastY === undefined) {
+          lastY = y;
+        }
+
+        var testX = Math.abs(lastX - x) > 10;
+        var testY = Math.abs(lastY - y) > 15;
+
+        if (testX || testY) {
+          if (testY) {
+            lastY = y;
+          } else {
+            lastX = x;
+          }
+        } else {
+          return currentNode;
+        } // console.log('🦄 x, y', x, y)
+
+
         while (true) {
           var children = currentNode.children;
 
@@ -1799,8 +1784,8 @@
 
           var t = binarySearch(children, function (node) {
             var el = document.getElementById(node._id);
-            var ty = getOffset(el).y;
-            var ty2 = ty + el.offsetHeight + currentTree.space;
+            var ty = getOffset(el).y + 10;
+            var ty2 = ty + el.offsetHeight + 10 + currentTree.space;
 
             if (ty2 < y) {
               return -1;
@@ -2197,7 +2182,7 @@
             moving: function moving(e, opt, store$$1) {
               var currentTime = new Date().getTime();
 
-              if (!lastTime || currentTime - lastTime > 50) {
+              if (!lastTime || currentTime - lastTime > 10) {
                 var draggableHelperInfo = {
                   event: e,
                   options: opt,

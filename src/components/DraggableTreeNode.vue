@@ -44,7 +44,7 @@ export default {
           moving: (e, opt, store) => {
             const currentTime = (new Date()).getTime()
 
-            if (!lastTime || currentTime - lastTime > 50) {
+            if (!lastTime || currentTime - lastTime > 10) {
               const draggableHelperInfo = {event: e, options: opt, store}
 
               lastTime = currentTime

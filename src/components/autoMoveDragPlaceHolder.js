@@ -7,6 +7,8 @@ import * as ut from '../plugins/utils'
 
 // actions for drag placeholder
 // 对 drag placeholder进行的操作
+let lastY
+let lastX
 const targets = {
   'nothing': info => {},
   'after': ({
@@ -130,9 +132,9 @@ const rules = {
   // 当前位置在另一节点inner垂直中线上
   'on targetNode middle': info => info.offset.y <= info.tiMiddleY,
   // 当前位置在另一节点inner左边
-  'at left': info => info.offset.x < info.tiOffset.x,
+  'at left': info => info.offset.x < info.tiOffset.x + info.currentTree.indent + 20,
   // 当前位置在另一节点innner indent位置右边
-  'at indent right': info => info.offset.x > info.tiOffset.x + info.currentTree.indent,
+  'at indent right': info => info.offset.x > info.tiOffset.x + info.currentTree.indent + 20,
 }
 // convert rule output to Boolean
 for (const key of Object.keys(rules)) {
@@ -176,29 +178,10 @@ export default function(draggableHelperInfo) {
     }, // right bottom point
     // tree
     currentTree() {
-      const currentTree = trees.find(tree => hp.isOffsetInEl(this.offset.x, this.offset.y, tree.$el))
-      if (currentTree) {
-        const dragStartTree = this.store
-        prevTree = dragStartTree
-        let treeChanged = true
-
-        if (prevTree._uid !== currentTree._uid) {
-          if (!ut.isPropTrue(dragStartTree.crossTree) || !ut.isPropTrue(currentTree.crossTree)) {
-            return
-          }
-          prevTree = currentTree
-          treeChanged = true
-        }
-        if (!ut.isPropTrue(currentTree.droppable)) {
-          return
-        }
-        if (treeChanged) {
-          // when move start or drag move into another tree
-          // resolve _droppable
-          resolveBranchDroppable(info, currentTree.rootData)
-        }
-        return currentTree
-      }
+      // BLOCKED CROSS TREE FEATURE
+      prevTree = this.store
+      resolveBranchDroppable(info, prevTree.rootData)
+      return prevTree
     },
     currentTreeRootEl() {
       return document.getElementById(this.currentTree.rootData._id)
@@ -232,11 +215,33 @@ export default function(draggableHelperInfo) {
         throw 'no currentTree'
       }
       //
+
       const {
         x,
         y
       } = this.offset
       let currentNode = currentTree.rootData
+
+      if (lastX === undefined) {
+        lastX = x
+      }
+      if (lastY === undefined) {
+        lastY = y
+      }
+
+      const testX = Math.abs(lastX - x) > 10
+      const testY = Math.abs(lastY - y) > 15
+
+      if(testX || testY) {
+        if (testY) {
+          lastY = y
+        } else {
+          lastX = x
+        }
+      } else {
+        return currentNode
+      }
+      // console.log('🦄 x, y', x, y)
       while (true) {
         let children = currentNode.children
         if (!children) {
@@ -252,8 +257,8 @@ export default function(draggableHelperInfo) {
         }
         const t = hp.binarySearch(children, (node) => {
           const el = document.getElementById(node._id)
-          const ty = hp.getOffset(el).y
-          const ty2 = ty + el.offsetHeight + currentTree.space
+          const ty = hp.getOffset(el).y + 10
+          const ty2 = ty + el.offsetHeight + 10 + currentTree.space
           if (ty2 < y) {
             return -1
           } else if (ty <= y) {
